@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>带看与佣金归属 · 内部工作台</title>
+<link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+<header class="topbar">
+  <div class="brand">
+    <span class="mark"></span>
+    <span class="title">带看与佣金归属工作台</span>
+    <span class="subtitle">内部作业系统 · 非营销页面</span>
+  </div>
+  <div class="context">
+    <div class="rule-chip" id="ruleChip" title="当前签署生效的团队规则版本">规则版本 —</div>
+    <label class="actor-pick">当前操作人
+      <select id="actorSelect"></select>
+    </label>
+  </div>
+</header>
+
+<nav class="tabs" id="tabs">
+  <button data-tab="properties" class="active">房源检索</button>
+  <button data-tab="customers">客户检索</button>
+  <button data-tab="calendar">带看日历</button>
+  <button data-tab="disputes">佣金 / 争议</button>
+  <button data-tab="audit">审计与短信</button>
+</nav>
+
+<main>
+  <!-- ================= 房源 ================= -->
+  <section id="tab-properties" class="tab active">
+    <div class="layout">
+      <div class="col-list">
+        <div class="searchbar">
+          <input id="propQ" placeholder="按地址检索房源，例如：望京">
+          <button id="propSearchBtn">检索</button>
+        </div>
+        <ul id="propList" class="cardlist"></ul>
+      </div>
+      <div class="col-detail" id="propDetail">
+        <p class="empty">从左侧选择房源，查看地址与带看时间线。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= 客户 ================= -->
+  <section id="tab-customers" class="tab">
+    <div class="layout">
+      <div class="col-list">
+        <div class="searchbar">
+          <input id="custQ" placeholder="按姓名 / 手机号检索">
+          <button id="custSearchBtn">检索</button>
+        </div>
+        <ul id="custList" class="cardlist"></ul>
+        <div class="panel form-panel">
+          <h3>登记新客户</h3>
+          <div class="form-row"><label>姓名<input id="ncName"></label></div>
+          <div class="form-row"><label>手机号<input id="ncPhone" placeholder="11 位手机号"></label></div>
+          <div class="form-row"><label>来源备注<input id="ncNote"></label></div>
+          <div class="form-actions">
+            <button id="dupCheckBtn" class="ghost">查重</button>
+            <button id="ncSubmitBtn">登记</button>
+          </div>
+          <div id="dupResult" class="dup-result"></div>
+        </div>
+      </div>
+      <div class="col-detail" id="custDetail">
+        <p class="empty">从左侧选择客户，查看档案与带看记录。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= 日历 ================= -->
+  <section id="tab-calendar" class="tab">
+    <div class="cal-head">
+      <button id="calPrev">‹ 上月</button>
+      <h2 id="calTitle"></h2>
+      <button id="calNext">下月 ›</button>
+    </div>
+    <div class="calendar" id="calendar"></div>
+    <div class="panel" id="dayPanel" hidden>
+      <div class="day-head">
+        <h3 id="dayTitle"></h3>
+        <button class="ghost small" id="dayClose">收起</button>
+      </div>
+      <div id="dayViewings"></div>
+      <div class="schedule-box" id="daySchedule"></div>
+    </div>
+  </section>
+
+  <!-- ================= 争议 ================= -->
+  <section id="tab-disputes" class="tab">
+    <div class="dispute-controls">
+      <select id="dealFilter">
+        <option value="">全部成交</option>
+        <option value="待裁决">待裁决</option>
+        <option value="系统建议">系统建议</option>
+        <option value="保护期外">保护期外</option>
+        <option value="已裁决">已裁决</option>
+      </select>
+      <button id="newDealBtn" class="ghost">登记成交</button>
+    </div>
+    <ul id="dealList" class="cardlist"></ul>
+    <div id="dealDetail"></div>
+  </section>
+
+  <!-- ================= 审计 ================= -->
+  <section id="tab-audit" class="tab">
+    <div class="audit-grid">
+      <div class="panel">
+        <h3>事件库（事实来源）</h3>
+        <div id="eventFeed" class="feed"></div>
+      </div>
+      <div class="panel">
+        <h3>模拟短信发件箱</h3>
+        <div id="smsFeed" class="feed"></div>
+      </div>
+      <div class="panel">
+        <h3>被拒绝动作留痕</h3>
+        <div id="deniedFeed" class="feed"></div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- 签字弹窗 -->
+<div id="signModal" class="modal" hidden>
+  <div class="modal-box">
+    <h3>客户带看签字</h3>
+    <p class="hint">请客户在下方手写签名，保存后随签到证据一并留存。</p>
+    <canvas id="signCanvas" width="520" height="200"></canvas>
+    <div class="form-row"><label>签到定位（可选）
+      <input id="signGeo" placeholder="lat,lng，如 39.99,116.47">
+    </label></div>
+    <div class="form-actions">
+      <button id="signClear" class="ghost">清除重签</button>
+      <button id="signSave">保存并签到</button>
+    </div>
+  </div>
+</div>
+
+<!-- 通用消息 -->
+<div id="toast" class="toast" hidden></div>
+
+<script src="/static/app.js"></script>
+</body>
+</html>
